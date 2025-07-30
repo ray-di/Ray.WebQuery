@@ -1,5 +1,5 @@
 {
-    "name": "ray/media-query-web",
+    "name": "ray/web-query",
     "description": "Web API access mapping framework for Ray.MediaQuery",
     "license": "MIT",
     "authors": [
