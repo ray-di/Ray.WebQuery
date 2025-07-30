@@ -11,9 +11,9 @@ use Override;
 use Psr\Http\Message\MessageInterface;
 use Ray\MediaQuery\Annotation\Qualifier\UriTemplateBindings;
 use Ray\MediaQuery\Exception\WebApiRequestException;
+use Rize\UriTemplate\UriTemplate;
 
 use function json_decode;
-use function uri_template;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -82,7 +82,8 @@ final class WebApiQuery implements WebApiQueryInterface
     private function executeRequest(string $method, string $uri, array $query): MessageInterface
     {
         $this->logger->start();
-        $boundUri = uri_template($uri, $this->uriTemplateBindings + $query);
+        $uriTemplate = new UriTemplate();
+        $boundUri = $uriTemplate->expand($uri, $this->uriTemplateBindings + $query);
         $response = $this->client->request($method, $boundUri, $query);
         $this->logger->log($boundUri, $query);
 
