@@ -13,21 +13,24 @@ class WebQueryTest extends TestCase
     public function testRequest(): void
     {
         $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
-        $response = $webQuery->request('GET', 'https://{domain1}/Ray.MediaQuery/schema/{id}.json', ['id' => 'web_query']);
+        $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
+        $response = $webQuery->request('GET', $uri, ['id' => 'web_query']);
         $this->assertSame('Web query schema', $response['title']);
     }
 
     public function testGetStringBody(): void
     {
         $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
-        $response = $webQuery->getStringBody('GET', 'https://{domain1}/Ray.MediaQuery/schema/{id}.json', ['id' => 'web_query']);
+        $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
+        $response = $webQuery->getStringBody('GET', $uri, ['id' => 'web_query']);
         $this->assertStringContainsString('"title": "Web query schema"', $response);
     }
 
     public function testGetHttpMessage(): void
     {
         $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
-        $response = $webQuery->getHttpMessage('GET', 'https://{domain1}/Ray.MediaQuery/schema/{id}.json', ['id' => 'web_query']);
+        $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
+        $response = $webQuery->getHttpMessage('GET', $uri, ['id' => 'web_query']);
         $this->assertStringContainsString('"title": "Web query schema"', $response->getBody()->getContents());
     }
 

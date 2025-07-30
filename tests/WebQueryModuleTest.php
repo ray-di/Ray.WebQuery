@@ -35,7 +35,8 @@ class WebQueryModuleTest extends TestCase
     {
         $response = $this->fooItem->item('web_query');
         $this->assertSame('Web query schema', $response['title']);
-        $this->assertSame('query: https://ray-di.github.io/Ray.MediaQuery/schema/web_query.json({"id":"web_query"})', (string) $this->logger);
+        $expected = 'query: https://ray-di.github.io/Ray.MediaQuery/schema/web_query.json({"id":"web_query"})';
+        $this->assertSame($expected, (string) $this->logger);
     }
 
     public function testGetRequestStringResponse(): void

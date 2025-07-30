@@ -1,4 +1,4 @@
-# Ray.MediaQuery-Web
+# Ray.WebQuery
 
 Web API access mapping framework for [Ray.MediaQuery](https://github.com/ray-di/Ray.MediaQuery).
 

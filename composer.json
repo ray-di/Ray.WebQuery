@@ -10,13 +10,17 @@
     ],
     "require": {
         "php": "^8.1",
-        "ray/media-query": "^1.0",
+        "ray/media-query": "1.x-dev",
         "guzzlehttp/guzzle": "^7.2",
         "psr/http-message": "^2.0"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
-        "phpunit/phpunit": "^10.5.46"
+        "phpunit/phpunit": "^10.5.46",
+        "squizlabs/php_codesniffer": "^3.8",
+        "phpstan/phpstan": "^1.10",
+        "vimeo/psalm": "^5.18 || ^6.0",
+        "phpmetrics/phpmetrics": "^2.8"
     },
     "autoload": {
         "psr-4": {
@@ -32,8 +36,35 @@
         }
     },
     "scripts": {
-        "test": "./vendor/bin/phpunit"
+        "coverage": "php -dzend_extension=xdebug.so -dxdebug.mode=coverage ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage",
+        "pcov": "php -dextension=pcov.so -d pcov.enabled=1 ./vendor/bin/phpunit --coverage-text --coverage-html=build/coverage  --coverage-clover=coverage.xml",
+        "cs": "./vendor/bin/phpcs",
+        "cs-fix": "./vendor/bin/phpcbf src tests",
+        "metrics": "./vendor/bin/phpmetrics --report-html=build/metrics --exclude=Exception src",
+        "clean": [
+            "./vendor/bin/phpstan clear-result-cache",
+            "./vendor/bin/psalm --clear-cache"
+        ],
+        "sa": [
+            "./vendor/bin/psalm --monochrome --show-info=true",
+            "./vendor/bin/phpstan analyse -c phpstan.neon"
+        ],
+        "test": "./vendor/bin/phpunit",
+        "tests": [
+            "@cs",
+            "@sa",
+            "@test"
+        ],
+        "build": [
+            "@clean",
+            "@cs",
+            "@sa",
+            "@pcov",
+            "@metrics"
+        ]
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "sort-packages": true,
         "allow-plugins": {
@@ -42,4 +73,3 @@
         }
     }
 }
-EOF < /dev/null
