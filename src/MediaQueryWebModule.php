@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Override;
 use Ray\Di\AbstractModule;
+use Ray\MediaQuery\Annotation\Qualifier\FactoryMethod;
 use Ray\MediaQuery\Annotation\Qualifier\UriTemplateBindings;
 use Ray\MediaQuery\Annotation\Qualifier\WebApiList;
 use Ray\MediaQuery\Annotation\WebQuery;
@@ -38,5 +39,10 @@ final class MediaQueryWebModule extends AbstractModule
 
         $this->bind()->annotatedWith(WebApiList::class)->toInstance($config);
         $this->bind()->annotatedWith(UriTemplateBindings::class)->toInstance($this->config->urlTemplateBindings);
+
+        // BDR factory layer
+        $this->bind(ReturnEntityInterface::class)->to(ReturnEntity::class);
+        $this->bind(WebFetchFactoryInterface::class)->to(WebFetchFactory::class);
+        $this->bind()->annotatedWith(FactoryMethod::class)->toInstance('factory');
     }
 }

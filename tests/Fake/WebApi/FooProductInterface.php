@@ -1,0 +1,45 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Ray\MediaQuery\WebApi;
+
+use Ray\MediaQuery\Annotation\WebQuery;
+use Ray\MediaQuery\FakeNoCtorEntity;
+use Ray\MediaQuery\FakeProductEntity;
+use Ray\MediaQuery\FakeProductFactory;
+use Ray\MediaQuery\FakeProductList;
+use Ray\MediaQuery\FakeStaticProductFactory;
+
+interface FooProductInterface
+{
+    /** Returns an entity built via constructor (WebFetchNewInstance path). */
+    #[WebQuery(id: 'foo_product', type: 'row')]
+    public function get(string $id): FakeProductEntity;
+
+    /** Returns a list of entities via constructor (WebFetchNewInstance + fetchAll path). */
+    /** @return array<FakeProductEntity> */
+    #[WebQuery(id: 'foo_product', type: 'row_list')]
+    public function list(string $status): array;
+
+    /** Returns an entity built via no-constructor class (WebFetchClass path). */
+    #[WebQuery(id: 'foo_product', type: 'row')]
+    public function getNoCtor(string $id): FakeNoCtorEntity;
+
+    /** Returns an entity via injected instance factory (WebFetchInjectionFactory path). */
+    #[WebQuery(id: 'foo_product', type: 'row', factory: FakeProductFactory::class)]
+    public function getWithTax(string $id): FakeProductEntity;
+
+    /** Returns a list via injected instance factory. */
+    /** @return array<FakeProductEntity> */
+    #[WebQuery(id: 'foo_product', type: 'row_list', factory: FakeProductFactory::class)]
+    public function listWithTax(string $status): array;
+
+    /** Returns an entity via static factory (WebFetchStaticFactory path). */
+    #[WebQuery(id: 'foo_product', type: 'row', factory: FakeStaticProductFactory::class)]
+    public function getStatic(string $id): FakeProductEntity;
+
+    /** Returns a PostFetch aggregate object. */
+    #[WebQuery(id: 'foo_product', type: 'row_list', factory: FakeProductFactory::class)]
+    public function getList(string $status): FakeProductList;
+}
