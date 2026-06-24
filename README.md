@@ -5,64 +5,86 @@ Web API access mapping framework for [Ray.MediaQuery](https://github.com/ray-di/
 ## Installation
 
 ```bash
-composer require ray/media-query-web
+composer require ray/web-query
 ```
 
-Note: This package depends on `ray/media-query` which provides the core database query functionality.
+Note: This package builds on `ray/media-query`, which provides the core query infrastructure (parameter injection, logging, etc.).
 
 ## Usage
 
-### Web API Query
+### Define an interface
 
-Create an interface with `#[WebQuery]` attribute:
+Annotate the methods with `#[WebQuery]`, giving each one a query ID:
 
 ```php
 <?php
 use Ray\MediaQuery\Annotation\WebQuery;
 
-interface ApiInterface
+interface UserApiInterface
 {
-    #[WebQuery('api.get')]
+    #[WebQuery('user_item')]
     public function get(string $id): array;
 }
 ```
 
-Create a web query configuration file `web_query.json`:
+### Create a web query configuration file
+
+`web_query.json` maps each query ID to an HTTP method and a URI template:
 
 ```json
 {
-  "api": {
-    "get": {
-      "method": "GET",
-      "path": "https://api.example.com/users/{id}"
-    }
-  }
+  "webQuery": [
+    {"id": "user_item", "method": "GET", "path": "https://{domain}/users/{id}"}
+  ]
 }
 ```
 
-Install the module:
+### Install the module
+
+`MediaQueryWebModule` is installed into `MediaQueryBaseModule`. The interfaces are
+registered with `Queries::fromClasses()`:
 
 ```php
 <?php
-use Ray\MediaQuery\MediaQueryWebModule;
-use Ray\MediaQuery\WebQueryConfig;
 use Ray\Di\Injector;
+use Ray\MediaQuery\MediaQueryBaseModule;
+use Ray\MediaQuery\MediaQueryWebModule;
+use Ray\MediaQuery\Queries;
+use Ray\MediaQuery\WebQueryConfig;
 
-$webConfig = new WebQueryConfig('web_query.json', ['domain' => 'example.com']);
-$module = new MediaQueryWebModule($webConfig);
+$queries = Queries::fromClasses([UserApiInterface::class]);
+$webConfig = new WebQueryConfig('web_query.json', ['domain' => 'api.example.com']);
+
+$module = new MediaQueryBaseModule($queries);
+$module->install(new MediaQueryWebModule($webConfig));
+
 $injector = new Injector($module);
+$api = $injector->getInstance(UserApiInterface::class);
 
-$api = $injector->getInstance(ApiInterface::class);
-$result = $api->get('123'); // GET https://api.example.com/users/123
+$user = $api->get('123'); // GET https://api.example.com/users/123
 ```
+
+URI template variables are filled from the method arguments and the bindings
+passed to `WebQueryConfig` (here `{domain}` comes from the bindings and `{id}`
+from the `get()` argument).
+
+### Response types
+
+The return type of the interface method selects how the HTTP response is handled:
+
+| Return type             | Result                              |
+|-------------------------|-------------------------------------|
+| `array`                 | JSON body decoded to an array       |
+| `string`                | Raw response body                   |
+| PSR-7 `MessageInterface`| The HTTP message object             |
 
 ## Features
 
 - **Web API Queries**: Execute HTTP requests via interface methods
-- **URI Template Support**: Dynamic URL parameter binding
+- **URI Template Support**: Dynamic URL parameter binding with `{param}` syntax
 - **Multiple Response Types**: JSON array, string, or PSR-7 message
 - **Parameter Injection**: Automatic parameter conversion and injection
-- **HTTP Client Integration**: Built on Guzzle HTTP client
+- **HTTP Client Integration**: Built on the Guzzle HTTP client
 
 ## Requirements
 
