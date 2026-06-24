@@ -25,6 +25,7 @@ class WebQueryModuleTest extends TestCase
         $webModule = new MediaQueryWebModule(new WebQueryConfig($mediaQueryJson, ['domain' => 'ray-di.github.io']));
         $baseModule = new MediaQueryBaseModule($mediaQueries);
         $baseModule->install($webModule);
+        $baseModule->override(new FakeWebClientModule());
         $this->injector = new Injector($baseModule);
         $logger = $this->injector->getInstance(MediaQueryLoggerInterface::class);
         $this->logger = $logger;
