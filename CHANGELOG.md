@@ -5,15 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2026-06-24
+## [1.0.0] - 2026-06-25
 
-First stable release.
+First stable release. Requires PHP 8.2+ and stable `ray/media-query` (`^1.0`).
 
 ### Changed
 - Relax the `rize/uri-template` constraint to `^0.3 || ^0.4` so the package can be installed alongside packages that require `rize/uri-template ^0.4` such as `bear/resource` 1.29+ and `ray/aura-sql-module` 1.17.x (#2)
 
 ### Fixed
 - Make the web query test suite hermetic so it no longer depends on a live external schema URL (#3)
+- Correct the package name (`ray/web-query`) and the usage examples in the README
 
 ## [1.0.0-rc1] - 2025-07-30
 
