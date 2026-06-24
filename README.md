@@ -88,5 +88,5 @@ The return type of the interface method selects how the HTTP response is handled
 
 ## Requirements
 
-- PHP 8.1+
+- PHP 8.2+
 - ray/media-query ^1.0

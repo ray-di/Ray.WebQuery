@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.2",
         "psr/http-message": "^2.0",
         "ray/aop": "^2.18",
         "ray/di": "^2.18",
-        "ray/media-query": "^1.0.0-rc1",
+        "ray/media-query": "^1.0",
         "rize/uri-template": "^0.3 || ^0.4"
     },
     "require-dev": {
