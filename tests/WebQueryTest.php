@@ -8,29 +8,36 @@ use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Ray\MediaQuery\Exception\WebApiRequestException;
 
+use function dirname;
+use function file_get_contents;
+
 class WebQueryTest extends TestCase
 {
+    private function webQuery(): WebApiQuery
+    {
+        $schema = (string) file_get_contents(dirname(__DIR__) . '/docs/web_query.json');
+
+        return new WebApiQuery(new FakeWebClient($schema), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
+    }
+
     public function testRequest(): void
     {
-        $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
         $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
-        $response = $webQuery->request('GET', $uri, ['id' => 'web_query']);
+        $response = $this->webQuery()->request('GET', $uri, ['id' => 'web_query']);
         $this->assertSame('Web query schema', $response['title']);
     }
 
     public function testGetStringBody(): void
     {
-        $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
         $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
-        $response = $webQuery->getStringBody('GET', $uri, ['id' => 'web_query']);
+        $response = $this->webQuery()->getStringBody('GET', $uri, ['id' => 'web_query']);
         $this->assertStringContainsString('"title": "Web query schema"', $response);
     }
 
     public function testGetHttpMessage(): void
     {
-        $webQuery = new WebApiQuery(new Client(), new MediaQueryLogger(), ['domain1' => 'ray-di.github.io']);
         $uri = 'https://{domain1}/Ray.MediaQuery/schema/{id}.json';
-        $response = $webQuery->getHttpMessage('GET', $uri, ['id' => 'web_query']);
+        $response = $this->webQuery()->getHttpMessage('GET', $uri, ['id' => 'web_query']);
         $this->assertStringContainsString('"title": "Web query schema"', $response->getBody()->getContents());
     }
 
