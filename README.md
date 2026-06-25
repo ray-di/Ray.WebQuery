@@ -146,8 +146,7 @@ object wraps it into a one-element list.
 
 You can also map straight to an entity **without** a factory: when the return
 type (or the `@return array<Entity>` docblock) is a class, each response is
-hydrated through the entity constructor — or through public properties if the
-class has no constructor.
+hydrated through the entity constructor.
 
 ```php
 #[WebQuery('product_item', type: 'row')]

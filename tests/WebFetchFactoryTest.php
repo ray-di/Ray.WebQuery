@@ -31,13 +31,6 @@ class WebFetchFactoryTest extends TestCase
         $this->assertInstanceOf(WebFetchNewInstance::class, $fetch);
     }
 
-    public function testReturnsWebFetchClassForEntityWithoutConstructor(): void
-    {
-        $webQuery = new WebQuery('id');
-        $fetch = $this->factory->factory($webQuery, FakeNoCtorEntity::class, null);
-        $this->assertInstanceOf(WebFetchClass::class, $fetch);
-    }
-
     public function testReturnsWebFetchInjectionFactoryForInstanceFactory(): void
     {
         $webQuery = new WebQuery(id: 'id', factory: FakeProductFactory::class);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ray\MediaQuery\WebApi;
 
 use Ray\MediaQuery\Annotation\WebQuery;
-use Ray\MediaQuery\FakeNoCtorEntity;
 use Ray\MediaQuery\FakeProductEntity;
 use Ray\MediaQuery\FakeProductFactory;
 use Ray\MediaQuery\FakeProductList;
@@ -21,10 +20,6 @@ interface FooProductInterface
     /** @return array<FakeProductEntity> */
     #[WebQuery(id: 'foo_product', type: 'row_list')]
     public function list(string $status): array;
-
-    /** Returns an entity built via no-constructor class (WebFetchClass path). */
-    #[WebQuery(id: 'foo_product', type: 'row')]
-    public function getNoCtor(string $id): FakeNoCtorEntity;
 
     /** Returns an entity via injected instance factory (WebFetchInjectionFactory path). */
     #[WebQuery(id: 'foo_product', type: 'row', factory: FakeProductFactory::class)]

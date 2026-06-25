@@ -35,15 +35,6 @@ class WebQueryBdrTest extends TestCase
         $this->assertSame(100, $result->price);
     }
 
-    public function testEntityWithoutConstructor(): void
-    {
-        $body = '{"name":"Widget","price":100}';
-        $this->fooProduct = $this->buildFooProduct($body);
-        $result = $this->fooProduct->getNoCtor('1');
-        $this->assertInstanceOf(FakeNoCtorEntity::class, $result);
-        $this->assertSame('Widget', $result->name);
-    }
-
     public function testInjectedFactoryAppliesTax(): void
     {
         $body = '{"name":"Widget","price":100}';

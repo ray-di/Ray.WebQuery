@@ -23,9 +23,8 @@ use function method_exists;
  *   1. static callable  → WebFetchStaticFactory
  *   2. instance factory → WebFetchInjectionFactory
  *   3. no entity        → WebFetchAssoc (sentinel for legacy path)
- *   4. entity, no ctor  → WebFetchClass
- *   5. entity missing   → InvalidWebEntityException
- *   6. entity with ctor → WebFetchNewInstance
+ *   4. entity missing   → InvalidWebEntityException
+ *   5. entity           → WebFetchNewInstance
  */
 final class WebFetchFactory implements WebFetchFactoryInterface
 {
@@ -57,10 +56,6 @@ final class WebFetchFactory implements WebFetchFactoryInterface
 
         if ($entity === null) {
             return new WebFetchAssoc();
-        }
-
-        if (class_exists($entity) && ! method_exists($entity, '__construct')) {
-            return new WebFetchClass($entity);
         }
 
         if (! class_exists($entity)) {
