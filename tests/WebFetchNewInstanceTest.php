@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ray\MediaQuery;
 
 use PHPUnit\Framework\TestCase;
+use Ray\MediaQuery\Exception\EntityWithoutConstructorException;
 use Ray\MediaQuery\Exception\InvalidWebEntityException;
 
 class WebFetchNewInstanceTest extends TestCase
@@ -51,6 +52,16 @@ class WebFetchNewInstanceTest extends TestCase
     {
         $fetch = new WebFetchNewInstance(FakeProductEntity::class);
         $this->expectException(InvalidWebEntityException::class);
+        $fetch->fetchRow(['name' => 'Widget'], $this->injector);
+    }
+
+    public function testThrowsWhenEntityHasNoConstructor(): void
+    {
+        $noCtor = new class {
+            public string $name = '';
+        };
+        $fetch = new WebFetchNewInstance($noCtor::class);
+        $this->expectException(EntityWithoutConstructorException::class);
         $fetch->fetchRow(['name' => 'Widget'], $this->injector);
     }
 }

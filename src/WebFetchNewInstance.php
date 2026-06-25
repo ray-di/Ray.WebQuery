@@ -6,6 +6,7 @@ namespace Ray\MediaQuery;
 
 use Override;
 use Ray\Di\InjectorInterface;
+use Ray\MediaQuery\Exception\EntityWithoutConstructorException;
 use Ray\MediaQuery\Exception\InvalidWebEntityException;
 use ReflectionClass;
 use ReflectionMethod;
@@ -16,8 +17,9 @@ use function array_key_exists;
 /**
  * Builds an entity by spreading named arguments into the constructor.
  *
- * Used when the entity class has a constructor
- * (analogous to PDO::FETCH_FUNC with new $entity(...$args)).
+ * The entity must declare a constructor (analogous to PDO::FETCH_FUNC with
+ * new $entity(...$args)); a class without one throws
+ * EntityWithoutConstructorException.
  */
 final class WebFetchNewInstance implements WebFetchInterface
 {
@@ -31,9 +33,12 @@ final class WebFetchNewInstance implements WebFetchInterface
     public function fetchRow(array $row, InjectorInterface $injector): object
     {
         $entity = $this->entity;
-        $ref = new ReflectionClass($entity);
-        $ctor = $ref->getConstructor();
-        $args = $ctor !== null ? $this->buildArgs($ctor, $row) : [];
+        $ctor = (new ReflectionClass($entity))->getConstructor();
+        if ($ctor === null) {
+            throw new EntityWithoutConstructorException($entity);
+        }
+
+        $args = $this->buildArgs($ctor, $row);
 
         /** @psalm-suppress MixedMethodCall */
         return new $entity(...$args);
