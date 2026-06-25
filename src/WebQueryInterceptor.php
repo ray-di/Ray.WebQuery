@@ -83,8 +83,8 @@ final class WebQueryInterceptor implements MethodInterceptor
     }
 
     /**
-     * A single object is returned for `type: 'row'`, a union return type, or a
-     * named (non-array, non-PostFetch) class return type. Otherwise a list.
+     * A single object is returned for `type: 'row'`, a nullable union (`T|null`),
+     * or a named (non-array, non-PostFetch) class return type. Otherwise a list.
      */
     private function isRow(WebQuery $webQuery, ReflectionType|null $returnType, bool $isPostFetch): bool
     {
