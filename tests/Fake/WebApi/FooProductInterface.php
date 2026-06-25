@@ -34,6 +34,10 @@ interface FooProductInterface
     #[WebQuery(id: 'foo_product', type: 'row', factory: FakeStaticProductFactory::class)]
     public function getStatic(string $id): FakeProductEntity;
 
+    /** A genuine union return type maps to a single object even without type: 'row'. */
+    #[WebQuery(id: 'foo_product', factory: FakeProductFactory::class)]
+    public function getUnion(string $id): FakeProductEntity|FakeProductList;
+
     /** Returns a PostFetch aggregate object. */
     #[WebQuery(id: 'foo_product', type: 'row_list', factory: FakeProductFactory::class)]
     public function getList(string $status): FakeProductList;

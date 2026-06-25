@@ -73,6 +73,25 @@ class WebResponseMapperTest extends TestCase
         $this->mapper()->map(new WebQuery('id'), FakeProductEntity::class, true, ['name' => 'Widget']);
     }
 
+    public function testMissingKeyFallsBackToDefaultOrNull(): void
+    {
+        // 'note' is nullable without a default -> null is injected.
+        // 'price' has a default -> the argument is omitted and the default applies.
+        $entity = new class ('', null) {
+            public function __construct(
+                public readonly string $name,
+                public readonly string|null $note,
+                public readonly int $price = 42,
+            ) {
+            }
+        };
+        $result = $this->mapper()->map(new WebQuery('id'), $entity::class, true, ['name' => 'Widget']);
+        /** @var object{name: string, note: string|null, price: int} $result */
+        $this->assertSame('Widget', $result->name);
+        $this->assertNull($result->note);
+        $this->assertSame(42, $result->price);
+    }
+
     public function testEntityWithoutConstructorThrows(): void
     {
         $noCtor = new class {

@@ -55,6 +55,16 @@ class WebQueryBdrTest extends TestCase
         $this->assertSame(100, $result->price);
     }
 
+    public function testUnionReturnTypeMapsToSingleObject(): void
+    {
+        $body = '{"name":"Widget","price":100}';
+        $this->fooProduct = $this->buildFooProduct($body);
+        $result = $this->fooProduct->getUnion('1');
+        $this->assertInstanceOf(FakeProductEntity::class, $result);
+        // FakeProductFactory applies tax: 100 -> 110
+        $this->assertSame(110, $result->price);
+    }
+
     public function testRowListWithFactory(): void
     {
         $body = '[{"name":"Widget","price":100},{"name":"Gadget","price":200}]';
