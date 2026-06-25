@@ -103,6 +103,10 @@ final class WebResponseMapper implements WebResponseMapperInterface
         }
 
         $ref = new ReflectionMethod($factory, $method);
+        if (! $ref->isPublic()) {
+            throw new InvalidWebFactoryException($factory, $method);
+        }
+
         if ($ref->isStatic()) {
             return function (array $row) use ($factory, $method, $ref): mixed {
                 /** @var array<string, mixed> $row */

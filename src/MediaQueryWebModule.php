@@ -7,6 +7,8 @@ namespace Ray\MediaQuery;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Override;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use Ray\Di\AbstractModule;
 use Ray\MediaQuery\Annotation\Qualifier\FactoryMethod;
 use Ray\MediaQuery\Annotation\Qualifier\UriTemplateBindings;
@@ -41,6 +43,7 @@ final class MediaQueryWebModule extends AbstractModule
         $this->bind()->annotatedWith(UriTemplateBindings::class)->toInstance($this->config->urlTemplateBindings);
 
         // BDR factory layer
+        $this->bind(DocBlockFactoryInterface::class)->toInstance(DocBlockFactory::createInstance());
         $this->bind(ReturnEntityInterface::class)->to(ReturnEntity::class);
         $this->bind(WebResponseMapperInterface::class)->to(WebResponseMapper::class);
         $this->bind()->annotatedWith(FactoryMethod::class)->toInstance('factory');

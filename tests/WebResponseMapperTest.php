@@ -91,6 +91,13 @@ class WebResponseMapperTest extends TestCase
         $this->mapper()->map($webQuery, null, true, ['name' => 'Widget']);
     }
 
+    public function testNonPublicFactoryMethodThrows(): void
+    {
+        $webQuery = new WebQuery(id: 'id', factory: FakeNonPublicProductFactory::class);
+        $this->expectException(InvalidWebFactoryException::class);
+        $this->mapper()->map($webQuery, null, true, ['name' => 'Widget', 'price' => 100]);
+    }
+
     public function testEntityClassNotFoundThrows(): void
     {
         /** @var class-string $missing */
