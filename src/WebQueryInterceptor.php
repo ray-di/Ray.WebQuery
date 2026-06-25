@@ -43,9 +43,9 @@ final class WebQueryInterceptor implements MethodInterceptor
         $returnType = $method->getReturnType();
         $entity = ($this->returnEntity)($method);
 
-        // Legacy path: no object mapping requested (raw array / string / PSR-7 message).
+        // No object mapping requested: return the raw array / string / PSR-7 message.
         if ($webQuery->factory === '' && $entity === null) {
-            return $this->invokeLegacy($returnType, $request, $values);
+            return $this->rawResponse($returnType, $request, $values);
         }
 
         /** @var array<mixed> $body */
@@ -104,14 +104,15 @@ final class WebQueryInterceptor implements MethodInterceptor
     }
 
     /**
-     * Legacy path: array / string / MessageInterface.
+     * Return the raw response in the form requested by the return type:
+     * array / string / MessageInterface.
      *
      * @param array{method: string, path: string} $request
      * @param array<string, string>               $values
      *
      * @return array<mixed>|string|MessageInterface
      */
-    private function invokeLegacy(
+    private function rawResponse(
         ReflectionType|null $returnType,
         array $request,
         array $values,
