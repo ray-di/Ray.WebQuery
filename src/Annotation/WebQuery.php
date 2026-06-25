@@ -11,6 +11,8 @@ final class WebQuery
 {
     public function __construct(
         public string $id,
+        public string $type = 'row_list',
+        public string $factory = '',
     ) {
     }
 }
