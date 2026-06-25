@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-06-25
+
+### Added
+- Map web API responses to typed domain objects (BDR read pattern). `#[WebQuery]` gains `type` (`'row'` | `'row_list'`) and `factory` parameters, mirroring `#[DbQuery]` (#5)
+- `WebResponseMapper` hydrates a decoded JSON response into objects via a DI-resolved factory (static or instance) or the return-type entity constructor, binding response keys to parameter names (#5)
+- `PostFetchInterface` / `PostFetchContext` to compose the mapped result into an aggregate return type through a static `fromContext()` named constructor (#5)
+- Dedicated exceptions `InvalidWebEntityException`, `InvalidWebFactoryException`, `EntityWithoutConstructorException`, and `MissingResponseKeyException` (#5)
+
+### Changed
+- Add `phpdocumentor/reflection-docblock` (`^5.3 || ^6.0`) as a runtime dependency, used to resolve entity types from `@return` docblocks (#5)
+
+The raw `array` / `string` / PSR-7 `MessageInterface` return paths are unchanged, so this release is backward compatible.
+
 ## [1.0.1] - 2026-06-25
 
 ### Changed
