@@ -12,25 +12,25 @@ use Ray\MediaQuery\FakeStaticProductFactory;
 
 interface FooProductInterface
 {
-    /** Returns an entity built via constructor (WebFetchNewInstance path). */
+    /** Returns an entity built via its constructor. */
     #[WebQuery(id: 'foo_product', type: 'row')]
     public function get(string $id): FakeProductEntity;
 
-    /** Returns a list of entities via constructor (WebFetchNewInstance + fetchAll path). */
+    /** Returns a list of entities built via their constructor. */
     /** @return array<FakeProductEntity> */
     #[WebQuery(id: 'foo_product', type: 'row_list')]
     public function list(string $status): array;
 
-    /** Returns an entity via injected instance factory (WebFetchInjectionFactory path). */
+    /** Returns an entity via a DI-resolved instance factory. */
     #[WebQuery(id: 'foo_product', type: 'row', factory: FakeProductFactory::class)]
     public function getWithTax(string $id): FakeProductEntity;
 
-    /** Returns a list via injected instance factory. */
+    /** Returns a list via a DI-resolved instance factory. */
     /** @return array<FakeProductEntity> */
     #[WebQuery(id: 'foo_product', type: 'row_list', factory: FakeProductFactory::class)]
     public function listWithTax(string $status): array;
 
-    /** Returns an entity via static factory (WebFetchStaticFactory path). */
+    /** Returns an entity via a static factory. */
     #[WebQuery(id: 'foo_product', type: 'row', factory: FakeStaticProductFactory::class)]
     public function getStatic(string $id): FakeProductEntity;
 

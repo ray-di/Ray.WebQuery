@@ -42,7 +42,7 @@ final class MediaQueryWebModule extends AbstractModule
 
         // BDR factory layer
         $this->bind(ReturnEntityInterface::class)->to(ReturnEntity::class);
-        $this->bind(WebFetchFactoryInterface::class)->to(WebFetchFactory::class);
+        $this->bind(WebResponseMapperInterface::class)->to(WebResponseMapper::class);
         $this->bind()->annotatedWith(FactoryMethod::class)->toInstance('factory');
     }
 }
