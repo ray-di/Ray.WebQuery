@@ -16,8 +16,11 @@ final class WebQuery
 {
     /**
      * @param string $id      `id` of an entry in the `webQuery` list of the media query JSON
-     * @param string $type    `row` returns one object for an `array` return type; read only with a factory or an entity
-     * @param string $factory Class whose `factory()` builds each row; a non-static one is created by the injector
+     * @param string $type    `row` maps the response to one object; `row_list` maps it to a list for an `array`
+     *                        or PostFetchInterface return type and to one object for another class or a union.
+     *                        Read only with a factory or an entity.
+     * @param string $factory Class whose `factory()` builds each row; a static `factory()` is called directly,
+     *                        a non-static one on an instance from the injector
      */
     public function __construct(
         public string $id,
