@@ -70,7 +70,6 @@ class WebQueryBdrTest extends TestCase
         $body = '[{"name":"Widget","price":100},{"name":"Gadget","price":200}]';
         $this->fooProduct = $this->buildFooProduct($body);
         $result = $this->fooProduct->listWithTax('active');
-        $this->assertIsArray($result);
         $this->assertCount(2, $result);
         $this->assertInstanceOf(FakeProductEntity::class, $result[0]);
         $this->assertSame(110, $result[0]->price);
@@ -82,7 +81,6 @@ class WebQueryBdrTest extends TestCase
         $body = '[{"name":"Widget","price":100},{"name":"Gadget","price":200}]';
         $this->fooProduct = $this->buildFooProduct($body);
         $result = $this->fooProduct->list('active');
-        $this->assertIsArray($result);
         $this->assertCount(2, $result);
         $this->assertInstanceOf(FakeProductEntity::class, $result[0]);
     }

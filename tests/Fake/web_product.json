@@ -1,5 +1,5 @@
 {
-    "$schema": "../../docs/schema/web_query.json",
+    "$schema": "../../docs/web_query.json",
     "webQuery": [
         {"id": "foo_product", "method": "GET", "path": "https://{domain}/products/{id}"}
     ]
