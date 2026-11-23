@@ -103,9 +103,7 @@ class WebResponseMapperTest extends TestCase
 
     public function testInvalidFactoryThrows(): void
     {
-        /** @var class-string $missing */
-        $missing = 'NotAClass\\Factory';
-        $webQuery = new WebQuery(id: 'id', factory: $missing);
+        $webQuery = new WebQuery(id: 'id', factory: 'NotAClass\\Factory');
         $this->expectException(InvalidWebFactoryException::class);
         $this->mapper()->map($webQuery, null, true, ['name' => 'Widget']);
     }
@@ -119,10 +117,8 @@ class WebResponseMapperTest extends TestCase
 
     public function testEntityClassNotFoundThrows(): void
     {
-        /** @var class-string $missing */
-        $missing = 'NotAnEntity\\Klass';
         $this->expectException(InvalidWebEntityException::class);
-        $this->mapper()->map(new WebQuery('id'), $missing, true, ['name' => 'x']);
+        $this->mapper()->map(new WebQuery('id'), FakeMissingEntity::name(), true, ['name' => 'x']);
     }
 
     public function testEmptyBodyRowReturnsNull(): void
